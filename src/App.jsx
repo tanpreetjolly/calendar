@@ -6,18 +6,18 @@ import './App.css';
 function App() {
   const [events, setEvents] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedEvents, setSelectedEvents] = useState([]);
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
-    setSelectedEvents(events.filter(event => event.start.toDateString() === date.toDateString()));
   };
 
   const handleEventAdd = (newEvent) => {
     setEvents([...events, newEvent]);
-    if (newEvent.start.toDateString() === selectedDate.toDateString()) {
-      setSelectedEvents([...selectedEvents, newEvent]);
-    }
+  };
+
+  const handleEventDelete = (eventToDelete) => {
+    const updatedEvents = events.filter(event => event !== eventToDelete);
+    setEvents(updatedEvents);
   };
 
   return (
@@ -44,24 +44,11 @@ function App() {
               selectedDate={selectedDate}
               onEventAdd={handleEventAdd}
             />
-            <div className="mt-4">
-              {selectedEvents.length > 0 && (
-                <div>
-                  <h3 className="text-xl font-semibold mb-2">
-                    Events on {selectedDate.toDateString()}
-                  </h3>
-                  <ul>
-                    {selectedEvents.map((event, index) => (
-                      <li key={index} className="mb-1">
-                        <span className="bg-gray-300 px-2 py-1 rounded-lg">
-                          {event.title}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
+            <EventsList
+              events={events}
+              selectedDate={selectedDate}
+              onDelete={handleEventDelete}
+            />
           </div>
         </div>
       </div>
@@ -105,6 +92,47 @@ function EventForm({ selectedDate, onEventAdd }) {
         Add Event
       </button>
     </div>
+  );
+}
+
+function EventsList({ events, selectedDate, onDelete }) {
+  const selectedEvents = events.filter(event => event.start.toDateString() === selectedDate.toDateString());
+
+  return (
+    <div className="mt-4">
+      {selectedEvents.length > 0 && (
+        <div>
+          <h3 className="text-xl font-semibold mb-2">
+            Events on {selectedDate.toDateString()}
+          </h3>
+          <ul>
+            {selectedEvents.map((event, index) => (
+              <Event
+                key={index}
+                event={event}
+                onDelete={() => onDelete(event)}
+              />
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Event({ event, onDelete }) {
+  return (
+    <li className="mb-1 flex justify-between items-center">
+      <span className="bg-gray-300 px-2 py-1 rounded-lg">
+        {event.title}
+      </span>
+      <button
+        className="text-red-600 hover:text-red-800"
+        onClick={onDelete}
+      >
+        X
+      </button>
+    </li>
   );
 }
 
