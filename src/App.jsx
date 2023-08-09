@@ -23,8 +23,8 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
       <h1 className="text-3xl font-semibold mb-4">Calendar with Highlighted Dates</h1>
-      <div className="flex gap-4">
-        <div className="w-1/2">
+      <div className="flex flex-col gap-4">
+        <div >
           <Calendar
             onChange={handleDateChange}
             value={selectedDate}
@@ -38,7 +38,7 @@ function App() {
             }
           />
         </div>
-        <div className="w-1/2">
+        <div >
           <div className="bg-white shadow-md rounded-md p-4">
             <EventForm
               selectedDate={selectedDate}
@@ -89,7 +89,7 @@ function EventForm({ selectedDate, onEventAdd }) {
         onClick={handleAddEvent}
         className="mt-2 bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600"
       >
-        Add Event
+        Add To List
       </button>
     </div>
   );
